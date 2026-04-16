@@ -27,13 +27,23 @@ local nix_tools = {
   "sqlfluff",
 }
 
+-- Tools the community packs request but that aren't available via Mason on NixOS
+-- (or are redundant with basedpyright for type checking)
+local skip_tools = {
+  "pyrefly",
+  "ty",
+}
+
 return {
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
     opts = function(_, opts)
       local skip = vim.list_extend(
-        vim.list_extend({}, nix_lsp_servers),
-        nix_tools
+        vim.list_extend(
+          vim.list_extend({}, nix_lsp_servers),
+          nix_tools
+        ),
+        skip_tools
       )
       opts.ensure_installed = vim.tbl_filter(function(tool)
         local name = type(tool) == "string" and tool or tool[1]

@@ -2,6 +2,7 @@
 
 {
   imports = [
+    ./adactl.nix
     ./claude-code.nix
     ./editor.nix
     ./git.nix

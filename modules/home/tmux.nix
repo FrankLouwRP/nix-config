@@ -122,6 +122,14 @@
     '';
   };
 
+  # sesh config
+  xdg.configFile."sesh/sesh.toml".text = ''
+    [[session]]
+    name = "topic sniffer"
+    path = "~"
+    startup_command = "tmux set-option remain-on-exit on && tmux set-hook client-attached \"run-shell 'tmux respawn-pane -t :.0 2>/dev/null; tmux respawn-pane -t :.1 2>/dev/null; tmux respawn-pane -t :.2 2>/dev/null; true'\" && tmux set-hook client-session-changed \"run-shell 'tmux respawn-pane -t :.0 2>/dev/null; tmux respawn-pane -t :.1 2>/dev/null; tmux respawn-pane -t :.2 2>/dev/null; true'\" && tmux split-window -h -c ~ 'adactl consume respCtrl -v' && tmux split-window -h -c ~ 'adactl consume respData -v' && tmux select-layout even-horizontal && tmux respawn-pane -k -t :.0 'adactl consume tcontrol -v'"
+  '';
+
   # sesh dependencies: fzf for the picker, fd for the find binding, zoxide for directory sessions
   home.packages = with pkgs; [
     sesh

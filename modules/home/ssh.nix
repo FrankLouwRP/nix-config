@@ -5,7 +5,7 @@
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
+    settings = {
       "github.com" = {
         user = "git";
         identityFile = "~/.ssh/id_ed25519";

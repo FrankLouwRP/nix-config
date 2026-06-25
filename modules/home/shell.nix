@@ -38,6 +38,9 @@
       # secrets
       sops = "nix shell nixpkgs#sops nixpkgs#age -c sops";
 
+      # kubernetes
+      kpods = "kubectl get pods -n infrared";
+
       # nix rebuild
       rebuild =
         if pkgs.stdenv.isLinux
@@ -79,6 +82,16 @@
 
       # prevent Ctrl-d from exiting shell
       set -o ignoreeof
+
+      # klog — follow logs for a deployment in the infrared namespace by env.
+      # usage: klog [dev|uat|prod] [app]   (env defaults to dev, app to adaengine)
+      # Targets the deployment, not the pod, so it survives the random
+      # ReplicaSet hash suffix changing on every redeploy.
+      klog() {
+        local env="''${1:-dev}"
+        local app="''${2:-adaengine}"
+        kubectl logs -f "deployment/''${app}-''${env}" -n infrared --tail=2000
+      }
 
       # smart Ctrl+R: history search when line is empty, file picker when there's text
       fzf-smart-widget() {
